@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+	<layout title="COM_BIRTHDAYS_BIRTHDAYS_VIEW_DEFAULT_TITLE" option="View">
+		<message>
+			<![CDATA[COM_BIRTHDAYS_BIRTHDAYS_VIEW_DEFAULT_DESC]]>
+		</message>
+	</layout>
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+				<!-- Define your basic params for the view here -->
+			</fieldset>
+		</fields>
+	</config>
+</metadata>

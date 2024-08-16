@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extension type="module"
+    client="site"
+    method="upgrade">
+    <name>mod_birthdays</name>
+    <author>René Kreijveld</author>
+    <creationDate>2024</creationDate>
+    <copyright>(C) 2024 René Kreijveld Webdevelopment</copyright>
+    <license>GNU General Public License version 3 or later; see LICENSE.txt</license>
+    <authorEmail>email@renekreijveld.nl</authorEmail>
+    <authorUrl>www.renekreijveld.nl</authorUrl>
+    <version>1.0.0</version>
+    <description>MOD_BIRTHDAYS_XML_DESCRIPTION</description>
+    <namespace path="src">Joomla\Module\Birthdays</namespace>
+    <files>
+        <filename module="mod_birthdays">mod_birthdays.php</filename>
+        <folder>src</folder>
+        <folder>tmpl</folder>
+    </files>
+    <languages>
+        <language tag="en-GB">language/en-GB/mod_birthdays.ini</language>
+        <language tag="en-GB">language/en-GB/mod_birthdays.sys.ini</language>
+    </languages>
+    <config>
+        <fields name="params">
+            <fieldset name="basic">
+            </fieldset>
+            <fieldset name="advanced">
+                <field name="layout"
+                    type="modulelayout"
+                    label="JFIELD_ALT_LAYOUT_LABEL"
+                    class="form-select"
+                    validate="moduleLayout" />
+
+                <field name="moduleclass_sfx"
+                    type="textarea"
+                    label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL"
+                    rows="3"
+                    validate="CssIdentifier" />
+
+                <field name="cache"
+                    type="list"
+                    label="COM_MODULES_FIELD_CACHING_LABEL"
+                    default="0"
+                    filter="integer"
+                    validate="options">
+                    <option value="0">COM_MODULES_FIELD_VALUE_NOCACHING</option>
+                </field>
+
+                <field name="cache_time"
+                    type="number"
+                    label="COM_MODULES_FIELD_CACHE_TIME_LABEL"
+                    default="900"
+                    filter="integer" />
+            </fieldset>
+        </fields>
+    </config>
+</extension>

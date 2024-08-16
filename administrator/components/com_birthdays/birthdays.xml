@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="component" method="upgrade">
+    <name>com_birthdays</name>
+    <creationDate>2024-08-01</creationDate>
+    <copyright>Copyright (C) 2024. All rights reserved.</copyright>
+    <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+    <author>Rene Kreijveld</author>
+    <authorEmail>email@renekreijveld.nl</authorEmail>
+    <authorUrl>https://renekreijveld.nl</authorUrl>
+    <version>1.0.0</version>
+    <description></description>
+    <namespace path="src">Joomla\Component\Birthdays</namespace>
+
+    <!-- Runs on install -->
+    <install>
+        <sql>
+            <file driver="mysql" charset="utf8">sql/install.mysql.utf8.sql</file>
+        </sql>
+    </install>
+    
+    <!-- Runs on uninstall -->
+    <uninstall>
+        <sql>
+            <file driver="mysql" charset="utf8">sql/uninstall.mysql.utf8.sql</file>
+        </sql>
+    </uninstall>
+
+    <files folder="site">
+        <folder>assets</folder>
+        <folder>src</folder>
+        <folder>tmpl</folder>
+    </files>
+    <languages folder="site">
+        <language tag="en-GB">language/en-GB/com_birthdays.ini</language>
+    </languages>
+    <administration>
+        <menu>COM_BIRTHDAYS</menu>
+        <submenu>
+            <menu link="option=com_birthdays&amp;view=birthdays" view="birthdays" img="components/com_birthdays/assets/images/view-16x16-birthdays.png" alt="Birthdays/Birthdays">COM_BIRTHDAYS_TITLE_BIRTHDAYS</menu>
+        </submenu>
+        <files folder="administrator">
+            <filename>access.xml</filename>
+            <filename>config.xml</filename>
+            <folder>assets</folder>
+            <folder>tmpl</folder>
+            <folder>forms</folder>
+            <folder>services</folder>
+            <folder>sql</folder>
+            <folder>src</folder>
+        </files>
+        <languages folder="administrator">
+            <language tag="en-GB">language/en-GB/com_birthdays.ini</language>
+			<language tag="en-GB">language/en-GB/com_birthdays.sys.ini</language>
+        </languages>
+    </administration>
+    <!-- Generated with the ComponentGenerator.com -->
+</extension>
