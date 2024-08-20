@@ -11,7 +11,6 @@ defined( '_JEXEC' ) or die;
         <li>
             <span class="name me-1"><?php echo $birthday->name; ?></span>
             <span class="date me-1">(<?php echo $next_birthday; ?>)</span>
-            <span class="age"><?php echo $birthday->next_age; ?></span>
         </li>
     <?php endforeach; ?>
     </ul>
