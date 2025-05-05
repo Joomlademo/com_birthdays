@@ -23,11 +23,11 @@ use Joomla\Component\Birthdays\Site\Helper\DatetimeHelper;
  */
 class BirthdayModel extends FormModel
 {
-	/**
-	 * The item to hold data
-	 *
-	 * @return object
-	 */
+    /**
+     * The item to hold data
+     *
+     * @return object
+     */
     protected $_item;
 
     /**
@@ -36,23 +36,26 @@ class BirthdayModel extends FormModel
      */
     private function fetchItem()
     {
-        $db = $this->getDbo();
+        $db    = Factory::getContainer()->get('DatabaseDriver');
         $query = $db->getQuery(true);
 
         $query->select('a.id, a.birthday, a.name');
-		$query->select('a.state, a.ordering');
+        $query->select('a.state, a.ordering');
 
         $query->from('#__birthdays as a');
 
-        		$query->select('d.name AS `created_by`');
-		$query->leftJoin($this->_db->qn('#__users') . ' AS `d` ON d.id = a.created_by');
+        $query->select('d.name AS `created_by`');
+        $query->leftJoin($this->_db->qn('#__users') . ' AS `d` ON d.id = a.created_by');
 
         $query->where($db->qn('a.id') . ' = ' . $db->q($this->getId()));
         $db->setQuery($query);
 
-        try {
+        try
+        {
             $db->execute();
-        } catch (\RuntimeException $e) {
+        }
+        catch ( \RuntimeException $e )
+        {
             throw new \Exception($e->getMessage(), 500);
         }
 
@@ -63,19 +66,20 @@ class BirthdayModel extends FormModel
      * @return int
      * @throws \Exception
      */
-    private function getId(): int
+    private function getId() : int
     {
         $app = Factory::getApplication();
 
-        $id = $app->input->getInt('id');
+        $id     = $app->input->getInt('id');
         $params = $app->getParams();
 
         $paramId = $params->get('id');
-        if ($paramId && $id === null) {
-            return (int)$paramId;
+        if ($paramId && $id === null)
+        {
+            return (int) $paramId;
         }
 
-        return (int)$id;
+        return (int) $id;
     }
 
     /**
@@ -88,22 +92,23 @@ class BirthdayModel extends FormModel
      * @throws \Exception
      * @since   1.6
      */
-	public function getItem($pk = null)
-	{
-		if (isset($this->_item)) {
-			return $this->_item;
-		}
+    public function getItem($pk = null)
+    {
+        if (isset($this->_item))
+        {
+            return $this->_item;
+        }
 
         $this->fetchItem();
 
         Form::addFormPath(JPATH_ADMINISTRATOR . '/components/com_birthdays/forms');
-        $form = $this->loadForm('com_birthdays.birthday', 'birthday', [
+        $form       = $this->loadForm('com_birthdays.birthday', 'birthday', [
             'control' => 'jform',
-            'load_data' => true
+            'load_data' => true,
         ]);
         $formHelper = new FormHelper($form);
         return $formHelper->appendFieldOptions([$this->_item])->getOne();
-	}
+    }
 
     /**
      * Method to get the form.
@@ -120,20 +125,23 @@ class BirthdayModel extends FormModel
     {
         Form::addFormPath(JPATH_ADMINISTRATOR . '/components/com_birthdays/forms');
 
-        $app = Factory::getApplication();
-        $id = $app->input->getInt('id');
-        $params = $app->getParams();
+        $app     = Factory::getApplication();
+        $id      = $app->input->getInt('id');
+        $params  = $app->getParams();
         $paramId = $params->get('id');
-        if ($paramId && !$id) {
+        if ($paramId && ! $id)
+        {
             $id = $paramId;
         }
-        if (empty($id)) {
+        if (empty($id))
+        {
             $loadData = false;
         }
 
         // Get the form
         $form = $this->loadForm('com_birthdays.birthday', 'birthday', ['control' => 'jform', 'load_data' => $loadData]);
-        if (empty($form)) {
+        if (empty($form))
+        {
             return false;
         }
 

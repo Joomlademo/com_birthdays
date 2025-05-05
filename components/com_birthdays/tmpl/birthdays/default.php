@@ -21,21 +21,26 @@ $listDirn  = $this->escape($this->state->get('list.direction'));
 <?php if ($this->params->get('show_page_heading')) : ?>
     <div class="page-header">
         <h1>
-			<?php if ($this->escape($this->params->get('page_heading'))) : ?>
-				<?php echo $this->escape($this->params->get('page_heading')); ?>
-			<?php else : ?>
-				<?php echo $this->escape($this->params->get('page_title')); ?>
-			<?php endif; ?>
+            <?php if ($this->escape($this->params->get('page_heading'))) : ?>
+                <?php echo $this->escape($this->params->get('page_heading')); ?>
+            <?php else : ?>
+                <?php echo $this->escape($this->params->get('page_title')); ?>
+            <?php endif; ?>
         </h1>
     </div>
 <?php endif; ?>
-<form action="<?php echo Route::_('index.php?option=com_birthdays&view=birthdays'); ?>" method="get" name="adminForm" id="adminForm">
+<form action="<?php echo Route::_('index.php?option=com_birthdays&view=birthdays'); ?>" method="get" name="adminForm"
+    id="adminForm">
     <div id="filter-bar" class="btn-toolbar mb-2">
         <div class="input-group mb-2">
-            <input type="text" name="filter_search" id="filter-search" class="form-control" placeholder="<?php echo Text::_('JSEARCH_FILTER'); ?>..." value="<?php echo $this->escape($this->state->get('filter.search')); ?>" title="<?php echo Text::_('JSEARCH_FILTER'); ?>" />
+            <input type="text" name="filter_search" id="filter-search" class="form-control"
+                placeholder="<?php echo Text::_('JSEARCH_FILTER'); ?>..."
+                value="<?php echo $this->escape($this->state->get('filter.search')); ?>"
+                title="<?php echo Text::_('JSEARCH_FILTER'); ?>" />
             <div class="input-group-append">
                 <button class="btn btn-secondary" type="submit"><?php echo Text::_('JSEARCH_FILTER'); ?></button>
-                <button class="btn btn-secondary" id="clear-search" type="button"><?php echo Text::_('JSEARCH_FILTER_CLEAR'); ?></button>
+                <button class="btn btn-secondary" id="clear-search"
+                    type="button"><?php echo Text::_('JSEARCH_FILTER_CLEAR'); ?></button>
             </div>
         </div>
     </div>
@@ -44,35 +49,37 @@ $listDirn  = $this->escape($this->state->get('list.direction'));
             <thead>
                 <tr>
                     <th class="item-birthday">
-						<?php echo HTMLHelper::_('grid.sort',  'COM_BIRTHDAYS_HEADING_FRONTEND_LIST_BIRTHDAYS_BIRTHDAY', 'a.birthday', $listDirn, $listOrder); ?>
-					</th>
-					<th class="item-name">
-						<?php echo HTMLHelper::_('grid.sort',  'COM_BIRTHDAYS_HEADING_FRONTEND_LIST_BIRTHDAYS_NAME', 'a.name', $listDirn, $listOrder); ?>
-					</th>
-					<th class="item-created_by">
-						<?php echo HTMLHelper::_('grid.sort',  'COM_BIRTHDAYS_HEADING_FRONTEND_LIST_BIRTHDAYS_CREATED_BY', 'a.created_by', $listDirn, $listOrder); ?>
-					</th>
+                        <?php echo HTMLHelper::_('grid.sort', 'COM_BIRTHDAYS_HEADING_FRONTEND_LIST_BIRTHDAYS_BIRTHDAY', 'a.birthday', $listDirn, $listOrder); ?>
+                    </th>
+                    <th class="item-name">
+                        <?php echo HTMLHelper::_('grid.sort', 'COM_BIRTHDAYS_HEADING_FRONTEND_LIST_BIRTHDAYS_NAME', 'a.name', $listDirn, $listOrder); ?>
+                    </th>
+                    <th class="item-created_by">
+                        <?php echo HTMLHelper::_('grid.sort', 'COM_BIRTHDAYS_HEADING_FRONTEND_LIST_BIRTHDAYS_CREATED_BY', 'a.created_by', $listDirn, $listOrder); ?>
+                    </th>
                 </tr>
             </thead>
             <tbody>
                 <?php foreach ($this->items as $i => $item) : ?>
-                <tr class="<?php echo ($i % 2) ? 'odd' : 'even'; ?>">
-                    <td class="item-birthday">
-						<a href="<?php echo Route::_('index.php?option=com_birthdays&view=birthday&id=' . $item->id . '&Itemid=' . $this->item_id); ?>">
-							<?php if($item->birthday) : ?>
-								<?php echo DatetimeHelper::convertFromStrftimeFormat($item->birthday, '%Y-%m-%d'); ?>
-							<?php endif; ?>
-						</a>
-					</td>
-					<td class="item-name">
-						<a href="<?php echo Route::_('index.php?option=com_birthdays&view=birthday&id=' . $item->id . '&Itemid=' . $this->item_id); ?>">
-							<?php echo $item->name; ?>
-						</a>
-					</td>
-					<td class="item-created_by">
-						<?php echo $item->created_by; ?>
-					</td>
-                </tr>
+                    <tr class="<?php echo ($i % 2) ? 'odd' : 'even'; ?>">
+                        <td class="item-birthday">
+                            <a
+                                href="<?php echo Route::_('index.php?option=com_birthdays&view=birthday&id=' . $item->id . '&Itemid=' . $this->item_id); ?>">
+                                <?php if ($item->birthday) : ?>
+                                    <?php echo DatetimeHelper::convertFromStrftimeFormat($item->birthday, '%Y-%m-%d'); ?>
+                                <?php endif; ?>
+                            </a>
+                        </td>
+                        <td class="item-name">
+                            <a
+                                href="<?php echo Route::_('index.php?option=com_birthdays&view=birthday&id=' . $item->id . '&Itemid=' . $this->item_id); ?>">
+                                <?php echo $item->name; ?>
+                            </a>
+                        </td>
+                        <td class="item-created_by">
+                            <?php echo $item->created_by; ?>
+                        </td>
+                    </tr>
                 <?php endforeach; ?>
             </tbody>
         </table>

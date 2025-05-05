@@ -19,5 +19,5 @@ use Joomla\CMS\MVC\Controller\FormController;
  */
 class BirthdayController extends FormController
 {
-	protected $view_list = 'birthdays';
+    protected $view_list = 'birthdays';
 }

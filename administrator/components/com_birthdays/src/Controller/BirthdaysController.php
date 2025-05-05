@@ -19,18 +19,18 @@ use Joomla\CMS\MVC\Controller\AdminController;
  */
 class BirthdaysController extends AdminController
 {
-	/**
-	 * Proxy for getModel
-	 * @since    1.6
-	 *
-	 * @param string $name
-	 * @param string $prefix
-	 * @param array $config
-	 *
-	 * @return bool
-	 */
-	public function getModel($name = 'Birthday', $prefix = 'Administrator', $config = [])
-	{
-		return parent::getModel($name, $prefix, ['ignore_request' => true]);
-	}
+    /**
+     * Proxy for getModel
+     * @since    1.6
+     *
+     * @param string $name
+     * @param string $prefix
+     * @param array $config
+     *
+     * @return bool
+     */
+    public function getModel($name = 'Birthday', $prefix = 'Administrator', $config = [])
+    {
+        return parent::getModel($name, $prefix, ['ignore_request' => true]);
+    }
 }

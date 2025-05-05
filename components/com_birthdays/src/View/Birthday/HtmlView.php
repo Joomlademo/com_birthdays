@@ -16,8 +16,8 @@ use Exception;
 use Joomla\CMS\MVC\View\HtmlView as BaseHtmlView;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
-use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Pagination\Pagination;
+use Joomla\Component\Birthdays\Site\Helper\AccessHelper;
 use Joomla\Registry\Registry;
 
 /**
@@ -65,21 +65,22 @@ class HtmlView extends BaseHtmlView
      */
     protected $params;
 
-	/**
-	 * @throws Exception
-	 */
-    public function display($tpl = null): void
+    /**
+     * @throws Exception
+     */
+    public function display($tpl = null) : void
     {
-		$app = Factory::getApplication();
+        $app = Factory::getApplication();
 
-        $this->form 				= $this->get('Form');
-        $this->state 				= $this->get('State');
-        $this->item 				= $this->get('Item');
-        $this->pagination           = $this->get('pagination');
+        $this->form       = $this->get('Form');
+        $this->state      = $this->get('State');
+        $this->item       = $this->get('Item');
+        $this->pagination = $this->get('pagination');
 
-        $this->params 				= $app->getParams('com_birthdays');
+        $this->params = $app->getParams('com_birthdays');
 
-        if (count($errors = $this->get('Errors'))) {
+        if (count($errors = $this->get('Errors')))
+        {
             throw new Exception(implode("\n", $errors));
         }
 
@@ -92,24 +93,30 @@ class HtmlView extends BaseHtmlView
      * @return bool
      * @throws Exception
      */
-    private function hasAccess(): bool
+    private function hasAccess() : bool
     {
-        $app = Factory::getApplication();
-        $user = Factory::getUser();
+        $app  = Factory::getApplication();
+        $user = Factory::getApplication()->getIdentity();
 
-        if($this->_layout == 'edit') {
+        if ($this->_layout == 'edit')
+        {
             $isEdit = ($app->input->getInt('id', 0) || $this->params->get('id'));
-            if ($isEdit) {
+            if ($isEdit)
+            {
                 $authorised = $user->authorise('core.edit', 'com_birthdays');
-                $access = new AccessHelper();
+                $access     = new AccessHelper();
                 $access->preloadOwnRecords('#__birthdays');
-                if ($access->canAccessOwnRecord()) {
+                if ($access->canAccessOwnRecord())
+                {
                     return true;
                 }
-            } else {
+            }
+            else
+            {
                 $authorised = $user->authorise('core.create', 'com_birthdays');
             }
-            if ($authorised !== true) {
+            if ($authorised !== true)
+            {
                 $app->enqueueMessage(Text::_('JERROR_ALERTNOAUTHOR'), 'error');
                 return false;
             }
@@ -124,55 +131,69 @@ class HtmlView extends BaseHtmlView
      * @throws \Exception
      * @since   1.6
      */
-    protected function setupDocument(): void
+    protected function setupDocument() : void
     {
-        $document = Factory::getDocument();
-        $app   = Factory::getApplication();
+        $document = Factory::getApplication()->getDocument();
+        $app      = Factory::getApplication();
 
-        if ($document === null) {
+        if ($document === null)
+        {
             return;
         }
-	    $wa = $document->getWebAssetManager();
-	    $wa->registerAndUseStyle('my-style', 'components/com_birthdays/assets/css/birthdays.css');
-	    $wa->registerAndUseScript('my-script', 'components/com_birthdays/assets/js/detail.js');
+        $wa = $document->getWebAssetManager();
+        $wa->registerAndUseStyle('my-style', 'components/com_birthdays/assets/css/birthdays.css');
+        $wa->registerAndUseScript('my-script', 'components/com_birthdays/assets/js/detail.js');
 
-        if ($app === null) {
+        if ($app === null)
+        {
             return;
         }
 
         $menus = $app->getMenu();
-        if ($menus === null) {
+        if ($menus === null)
+        {
             return;
         }
         $menu = $menus->getActive();
 
-        if ($menu) {
+        if ($menu)
+        {
             $this->params->def('page_heading', $this->params->get('page_title', $menu->title));
-        } else {
+        }
+        else
+        {
             $this->params->def('page_heading', Text::_('COM_BIRTHDAYS_DEFAULT_PAGE_TITLE'));
         }
 
         $title = $this->params->get('page_title', '');
 
-        if (empty($title)) {
+        if (empty($title))
+        {
             $title = $app->get('sitename');
-        } elseif ((int)$app->get('sitename_pagetitles', 0) === 1) {
+        }
+        elseif ((int) $app->get('sitename_pagetitles', 0) === 1)
+        {
             $title = Text::sprintf('JPAGETITLE', $app->get('sitename'), $title);
-        } elseif ((int)$app->get('sitename_pagetitles', 0) === 2) {
+        }
+        elseif ((int) $app->get('sitename_pagetitles', 0) === 2)
+        {
             $title = Text::sprintf('JPAGETITLE', $title, $app->get('sitename'));
         }
 
         $this->document->setTitle($title);
 
-        if ($this->params->get('menu-meta_description')) {
+        if ($this->params->get('menu-meta_description'))
+        {
             $this->document->setDescription($this->params->get('menu-meta_description'));
         }
 
-        if ($this->params->get('menu-meta_keywords')) {
+        if ($this->params->get('menu-meta_keywords'))
+        {
             $this->document->setMetadata('keywords', $this->params->get('menu-meta_keywords'));
         }
 
-        if ($this->params->get('robots')) {
+        if ($this->params->get('robots'))
+        {
             $this->document->setMetadata('robots', $this->params->get('robots'));
         }
     }

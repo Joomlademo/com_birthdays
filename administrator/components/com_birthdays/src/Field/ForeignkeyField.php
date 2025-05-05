@@ -41,7 +41,7 @@ class ForeignkeyField extends ListField
      */
     protected function getInput()
     {
-        $db = Factory::getDbo();
+        $db = Factory::getContainer()->get('DatabaseDriver');
 
         // Define the attributes to load
         $attributesToLoad = ['table', 'key', 'value', 'sql_where', 'sql_group', 'sql_order'];

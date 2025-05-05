@@ -25,27 +25,25 @@ use Joomla\Component\Birthdays\Administrator\Extension\BirthdaysComponent;
  *
  * @since  4.0.0
  */
-return new class implements ServiceProviderInterface
-{
-	/**
-	 * Registers the service provider with a DI container.
-	 *
-	 * @param   Container  $container  The DI container.
-	 *
-	 * @return  void
-	 *
-	 * @since   4.0.0
-	 */
-	public function register(Container $container)
-	{
-		$container->registerServiceProvider(new MVCFactory('\\Joomla\\Component\\Birthdays'));
-		$container->registerServiceProvider(new ComponentDispatcherFactory('\\Joomla\\Component\\Birthdays'));
+return new class implements ServiceProviderInterface {
+    /**
+     * Registers the service provider with a DI container.
+     *
+     * @param   Container  $container  The DI container.
+     *
+     * @return  void
+     *
+     * @since   4.0.0
+     */
+    public function register(Container $container)
+    {
+        $container->registerServiceProvider(new MVCFactory('\\Joomla\\Component\\Birthdays'));
+        $container->registerServiceProvider(new ComponentDispatcherFactory('\\Joomla\\Component\\Birthdays'));
         $container->registerServiceProvider(new RouterFactory('\\Joomla\\Component\\Birthdays'));
 
         $container->set(
             ComponentInterface::class,
-            function (Container $container)
-            {
+            function (Container $container) {
                 $component = new BirthdaysComponent($container->get(ComponentDispatcherFactoryInterface::class));
                 $component->setMVCFactory($container->get(MVCFactoryInterface::class));
                 $component->setRouterFactory($container->get(RouterFactoryInterface::class));
@@ -53,5 +51,5 @@ return new class implements ServiceProviderInterface
                 return $component;
             }
         );
-	}
+    }
 };

@@ -33,7 +33,7 @@ class Router extends RouterView
     public function __construct(SiteApplication $app, AbstractMenu $menu)
     {
         $this->registerView(new RouterViewConfiguration('birthdays'));
-		$this->registerView(new RouterViewConfiguration('birthday'));
+        $this->registerView(new RouterViewConfiguration('birthday'));
 
         parent::__construct($app, $menu);
 

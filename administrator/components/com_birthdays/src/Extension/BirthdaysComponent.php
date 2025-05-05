@@ -22,5 +22,5 @@ use Joomla\CMS\Extension\MVCComponent;
  */
 class BirthdaysComponent extends MVCComponent implements RouterServiceInterface
 {
-	use RouterServiceTrait;
+    use RouterServiceTrait;
 }

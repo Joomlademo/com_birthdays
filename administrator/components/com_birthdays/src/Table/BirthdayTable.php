@@ -45,10 +45,11 @@ class BirthdayTable extends Table
      */
     public function bind($data, $ignore = '')
     {
-		$input = Factory::getApplication()->input;
-		$task = $input->getString('task', '');
+        $input = Factory::getApplication()->input;
+        $task  = $input->getString('task', '');
 
-        if(($task == 'save' || $task == 'apply') && (!Factory::getUser()->authorise('core.edit.state','com_birthdays') && !isset($data['id']))) {
+        if (($task == 'save' || $task == 'apply') && (! Factory::getUser()->authorise('core.edit.state', 'com_birthdays') && ! isset($data['id'])))
+        {
             $data['state'] = 0;
         }
 
@@ -66,12 +67,12 @@ class BirthdayTable extends Table
             $data['metadata'] = (string) $registry;
         }
 
-        if(!Factory::getUser()->authorise('core.admin', 'com_birthdays.birthday.'.$data['id']))
+        if (! Factory::getApplication()->getIdentity()->authorise('core.admin', 'com_birthdays.birthday.' . $data['id']))
         {
-            $actions = ContentHelper::getActions('com_birthdays','birthday');
-            $defaultActions = Access::getAssetRules('com_birthdays.birthday.'.$data['id'])->getData();
-            $jaccessRules = [];
-            foreach($actions as $action)
+            $actions        = ContentHelper::getActions('com_birthdays', 'birthday');
+            $defaultActions = Access::getAssetRules('com_birthdays.birthday.' . $data['id'])->getData();
+            $jaccessRules   = [];
+            foreach ($actions as $action)
             {
                 $jaccessRules[$action->name] = $defaultActions[$action->name];
             }
@@ -79,44 +80,45 @@ class BirthdayTable extends Table
         }
 
         //Bind the rules for ACL where supported.
-		if (isset($data['rules']) && is_array($data['rules']))
+        if (isset($data['rules']) && is_array($data['rules']))
         {
-			$this->setRules($data['rules']);
-		}
+            $this->setRules($data['rules']);
+        }
 
-		$dateTimeNow = new \DateTime('NOW');
+        $dateTimeNow = new \DateTime('NOW');
 
-		if ($data['id'])
-		{
-			$data['updated_datetime'] = $dateTimeNow->format('Y-m-d H:i:s');
-		}
-		else
-		{
-			$data['created_datetime'] = $dateTimeNow->format('Y-m-d H:i:s');
-		}
-		
+        if ($data['id'])
+        {
+            $data['updated_datetime'] = $dateTimeNow->format('Y-m-d H:i:s');
+        }
+        else
+        {
+            $data['created_datetime'] = $dateTimeNow->format('Y-m-d H:i:s');
+        }
+
         return parent::bind($data, $ignore);
     }
 
-	/**
-	 * This function convert an array of JAccessRule objects into an rules array.
-	 *
-	 * @param array $jaccessRules an arrao of JAccessRule objects
-	 *
-	 * @return array
-	 */
+    /**
+     * This function convert an array of JAccessRule objects into an rules array.
+     *
+     * @param array $jaccessRules an arrao of JAccessRule objects
+     *
+     * @return array
+     */
     private function jaccessRulesToArray($jaccessRules)
     {
         $rules = [];
-        foreach($jaccessRules as $action => $jaccess)
+        foreach ($jaccessRules as $action => $jaccess)
         {
-            if (empty($jaccess)) {
+            if (empty($jaccess))
+            {
                 continue;
             }
             $actions = [];
-            foreach($jaccess->getData() as $group => $allow)
+            foreach ($jaccess->getData() as $group => $allow)
             {
-                $actions[$group] = ((bool)$allow);
+                $actions[$group] = ((bool) $allow);
             }
             $rules[$action] = $actions;
         }
@@ -129,7 +131,7 @@ class BirthdayTable extends Table
     public function check()
     {
         //If there is an ordering column and this is a new row then get the next ordering value
-        if (property_exists($this, 'ordering') && (int)$this->id === 0)
+        if (property_exists($this, 'ordering') && (int) $this->id === 0)
         {
             $this->ordering = self::getNextOrder();
         }
@@ -137,37 +139,37 @@ class BirthdayTable extends Table
         return parent::check();
     }
 
-	/**
-	 * The default store method
-	 *
-	 * @param bool $updateNulls
-	 *
-	 * @return bool
+    /**
+     * The default store method
+     *
+     * @param bool $updateNulls
+     *
+     * @return bool
      * @throws \Exception
-	 */
+     */
     function store($updateNulls = false)
     {
-    	$k = $this->_tbl_key;
+        $k = $this->_tbl_key;
 
-    	if ($this->$k)
-    	{
-    		$ret = $this->updateObject($updateNulls);
-    	}
-    	else
-    	{
-    		$ret = $this->_db->insertObject($this->_tbl, $this, $this->_tbl_key);
-    	}
-    
-    	if (!$ret)
-    	{
-    		$this->setError(get_class( $this ).'::store failed - ' . $this->_db->getErrorMsg());
+        if ($this->$k)
+        {
+            $ret = $this->updateObject($updateNulls);
+        }
+        else
+        {
+            $ret = $this->_db->insertObject($this->_tbl, $this, $this->_tbl_key);
+        }
 
-    		return false;
-    	}
+        if (! $ret)
+        {
+            $this->setError(get_class($this) . '::store failed - ' . $this->_db->getErrorMsg());
 
-    	return true;
+            return false;
+        }
+
+        return true;
     }
-    
+
     /**
      * Method to set the publishing state for a row or list of rows in the database
      * table. The method respects checked out rows by other users and will attempt
@@ -186,9 +188,9 @@ class BirthdayTable extends Table
         $k = $this->_tbl_key;
 
         // Sanitize input.
-	    ArrayHelper::toInteger($pks);
+        ArrayHelper::toInteger($pks);
         $userId = (int) $userId;
-        $state = (int) $state;
+        $state  = (int) $state;
 
         // If there are no primary keys set check to see if the instance key is set.
         if (empty($pks))
@@ -209,7 +211,7 @@ class BirthdayTable extends Table
         $where = $k . '=' . implode(' OR ' . $k . '=', $pks);
 
         // Determine if there is checkin support for the table.
-        if (!property_exists($this, 'checked_out') || !property_exists($this, 'checked_out_time'))
+        if (! property_exists($this, 'checked_out') || ! property_exists($this, 'checked_out_time'))
         {
             $checkin = '';
         }
@@ -220,18 +222,18 @@ class BirthdayTable extends Table
 
         try
         {
-	        // Update the publishing state for rows with the given primary keys
-	        $this->_db->setQuery(
-		        'UPDATE `' . $this->_tbl . '`' .
-		        ' SET `state` = ' . (int) $state .
-		        ' WHERE (' . $where . ')' .
-		        $checkin
-	        );
-	        $this->_db->execute();
+            // Update the publishing state for rows with the given primary keys
+            $this->_db->setQuery(
+                'UPDATE `' . $this->_tbl . '`' .
+                ' SET `state` = ' . (int) $state .
+                ' WHERE (' . $where . ')' .
+                $checkin
+            );
+            $this->_db->execute();
         }
-        catch (\RuntimeException $e)
+        catch ( \RuntimeException $e )
         {
-	        throw new \RuntimeException($e->getMessage());
+            throw new \RuntimeException($e->getMessage());
         }
 
         // If checkin is supported and all rows were adjusted, check them in.
@@ -253,30 +255,30 @@ class BirthdayTable extends Table
         $this->setError('');
         return true;
     }
-    
+
     /**
-      * Define a namespaced asset name for inclusion in the #__assets table
-      * 
-      * @return string The asset name 
-      *
-      * @see 	JTable::_getAssetName
-      */
+     * Define a namespaced asset name for inclusion in the #__assets table
+     * 
+     * @return string The asset name 
+     *
+     * @see 	JTable::_getAssetName
+     */
     protected function _getAssetName()
     {
         $k = $this->_tbl_key;
         return 'com_birthdays.birthday.' . (int) $this->$k;
     }
 
-	/**
-	 * Returns the parent asset's id. If you have a tree structure, retrieve the parent's id using the external key field
-	 *
-	 * @see JTable::_getAssetParentId
-	 *
-	 * @param Table|null $table
-	 * @param null $id
-	 *
-	 * @return int
-	 */
+    /**
+     * Returns the parent asset's id. If you have a tree structure, retrieve the parent's id using the external key field
+     *
+     * @see JTable::_getAssetParentId
+     *
+     * @param Table|null $table
+     * @param null $id
+     *
+     * @return int
+     */
     protected function _getAssetParentId(Table $table = NULL, $id = NULL) : int
     {
         // We will retrieve the parent-asset from the Asset-table
@@ -288,7 +290,7 @@ class BirthdayTable extends Table
         // Return the found asset-parent-id
         if ($assetParent->id)
         {
-            $assetParentId=$assetParent->id;
+            $assetParentId = $assetParent->id;
         }
         return $assetParentId;
     }
@@ -303,45 +305,57 @@ class BirthdayTable extends Table
      * @throws \Exception
      * @since   1.7.0
      */
-    public function updateObject(bool $updateNulls = false): bool
+    public function updateObject(bool $updateNulls = false) : bool
     {
         $fields = [];
-        $where = [];
+        $where  = [];
 
         $key = '';
-        if (is_string($this->_tbl_key)) {
+        if (is_string($this->_tbl_key))
+        {
             $key = array($this->_tbl_key);
         }
 
-        if (is_object($this->_tbl_key)) {
-            $key = (array)$this->_tbl_key;
+        if (is_object($this->_tbl_key))
+        {
+            $key = (array) $this->_tbl_key;
         }
 
         $statement = 'UPDATE ' . $this->_db->qn($this->_tbl) . ' SET %s WHERE %s';
 
-        foreach (get_object_vars($this) as $k => $v) {
-            if (is_array($v) || is_object($v) || $k[0] === '_') {
+        foreach (get_object_vars($this) as $k => $v)
+        {
+            if (is_array($v) || is_object($v) || $k[0] === '_')
+            {
                 continue;
             }
-            if (in_array($k, $key)) {
+            if (in_array($k, $key))
+            {
                 $where[] = $this->_db->qn($k) . ($v === null ? ' IS NULL' : ' = ' . $this->_db->q($v));
                 continue;
             }
 
-            if ($v === null) {
-                if ($updateNulls) {
+            if ($v === null)
+            {
+                if ($updateNulls)
+                {
                     $val = 'NULL';
-                } else {
+                }
+                else
+                {
                     continue;
                 }
-            } else {
+            }
+            else
+            {
                 $val = $this->_db->q($v);
             }
 
             $fields[$k] = $this->_db->qn($k) . '=' . $val;
         }
 
-        if (empty($fields)) {
+        if (empty($fields))
+        {
             return true;
         }
 
@@ -356,19 +370,23 @@ class BirthdayTable extends Table
      * @return array
      * @throws \Exception
      */
-    private function setNullValues(array $fields): array
+    private function setNullValues(array $fields) : array
     {
         $app = Factory::getApplication();
-        if ($app === null) {
+        if ($app === null)
+        {
             return $fields;
         }
         $data = $app->input->get('jform', null, null);
-        $id = !empty($data['id']) ? $data['id'] : $app->input->get('id');
-        if (!$id) {
+        $id   = ! empty($data['id']) ? $data['id'] : $app->input->get('id');
+        if (! $id)
+        {
             return $fields;
         }
-        foreach ($this->getFields() as $field) {
-            if ($field->Null === 'YES' && $data[$field->Field] === '' && in_array($field->Type, ['date', 'datetime'])) {
+        foreach ($this->getFields() as $field)
+        {
+            if ($field->Null === 'YES' && $data[$field->Field] === '' && in_array($field->Type, ['date', 'datetime']))
+            {
                 $fields[$field->Field] = $this->_db->qn($field->Field) . ' = NULL';
             }
         }

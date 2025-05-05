@@ -31,14 +31,21 @@ class BirthdaysModel extends ListModel
      */
     public function __construct($config = array())
     {
-        if (empty($config['filter_fields'])) {
+        if (empty($config['filter_fields']))
+        {
             $config['filter_fields'] = array(
-                'id', 'a.id',
-				'birthday', 'a.birthday',
-				'name', 'a.name',
-				'created_by', 'a.created_by',
-				'state', 'a.state',
-				'ordering', 'a.ordering',
+                'id',
+                'a.id',
+                'birthday',
+                'a.birthday',
+                'name',
+                'a.name',
+                'created_by',
+                'a.created_by',
+                'state',
+                'a.state',
+                'ordering',
+                'a.ordering',
             );
         }
 
@@ -60,7 +67,7 @@ class BirthdaysModel extends ListModel
      */
     protected function populateState($ordering = null, $direction = null)
     {
-        $app = Factory::getApplication();
+        $app   = Factory::getApplication();
         $input = $app->input;
 
         $search = $this->getUserStateFromRequest($this->context . '.filter.search', 'filter_search');
@@ -85,12 +92,12 @@ class BirthdaysModel extends ListModel
         $query = $this->_db->getQuery(true);
 
         $query->select('a.id, a.birthday, a.name');
-		$query->select('a.state, a.ordering');
+        $query->select('a.state, a.ordering');
 
         $query->from('`#__birthdays` AS a');
 
-        		$query->select('d.name AS `created_by`');
-		$query->leftJoin($this->_db->qn('#__users') . ' AS `d` ON d.id = a.created_by');
+        $query->select('d.name AS `created_by`');
+        $query->leftJoin($this->_db->qn('#__users') . ' AS `d` ON d.id = a.created_by');
 
         $query->where('a.state = 1');
 
@@ -100,17 +107,20 @@ class BirthdaysModel extends ListModel
         // Search in these columns
         $searchColumns = [
             'a.birthday',
-			'a.name',
-			'd.name',
+            'a.name',
+            'd.name',
         ];
 
-        if (!empty($searchWord)) {
+        if (! empty($searchWord))
+        {
             if (stripos($searchWord, 'id:') === 0)
             {
                 // Build the ID search
                 $idPart = (int) substr($searchWord, 3);
                 $query->where($this->_db->qn('a.id') . ' = ' . $this->_db->q($idPart));
-            } else {
+            }
+            else
+            {
                 $query = DatabaseHelper::buildSearchQuery($searchWord, $searchColumns, $query);
             }
         }
@@ -118,12 +128,15 @@ class BirthdaysModel extends ListModel
         $query->group($this->_db->qn('a.id'));
 
         // Add the list ordering clause
-        $orderCol = $this->state->get('list.ordering');
+        $orderCol  = $this->state->get('list.ordering');
         $orderDirn = $this->state->get('list.direction');
 
-        if ($orderCol && $orderDirn) {
+        if ($orderCol && $orderDirn)
+        {
             $query->order($this->_db->escape($orderCol . ' ' . $orderDirn));
-        } else {
+        }
+        else
+        {
             $query->order('a.ordering');
         }
 
@@ -138,9 +151,9 @@ class BirthdaysModel extends ListModel
     public function getItems()
     {
         Form::addFormPath(JPATH_ADMINISTRATOR . '/components/com_birthdays/forms');
-        $form = $this->loadForm('com_birthdays.birthday', 'birthday', [
+        $form       = $this->loadForm('com_birthdays.birthday', 'birthday', [
             'control' => 'jform',
-            'load_data' => true
+            'load_data' => true,
         ]);
         $formHelper = new FormHelper($form);
         return $formHelper->appendFieldOptions(parent::getItems())->getAll();

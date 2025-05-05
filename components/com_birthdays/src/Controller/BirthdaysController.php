@@ -18,17 +18,17 @@ use Joomla\CMS\MVC\Controller\BaseController;
  */
 class BirthdaysController extends BaseController
 {
-	/**
-	 * Proxy for getModel.
-	 * @since    1.6
-	 *
-	 * @param string $name
-	 * @param string $prefix
-	 *
-	 * @return mixed
-	 */
-	public function &getModel($name = 'Birthday', $prefix = 'Administrator')
-	{
-		return parent::getModel($name, $prefix, ['ignore_request' => true]);
-	}
+    /**
+     * Proxy for getModel.
+     * @since    1.6
+     *
+     * @param string $name
+     * @param string $prefix
+     *
+     * @return mixed
+     */
+    public function &getModel($name = 'Birthday', $prefix = 'Administrator')
+    {
+        return parent::getModel($name, $prefix, ['ignore_request' => true]);
+    }
 }

@@ -20,15 +20,15 @@ use Joomla\CMS\Dispatcher\ComponentDispatcher;
  */
 class Dispatcher extends ComponentDispatcher
 {
-	/**
-	 * Dispatch a controller task. Redirecting the user if appropriate.
-	 *
-	 * @return  void
-	 *
-	 * @since   4.0.0
-	 */
-	public function dispatch()
-	{
-		parent::dispatch();
-	}
+    /**
+     * Dispatch a controller task. Redirecting the user if appropriate.
+     *
+     * @return  void
+     *
+     * @since   4.0.0
+     */
+    public function dispatch()
+    {
+        parent::dispatch();
+    }
 }

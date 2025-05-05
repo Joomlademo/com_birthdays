@@ -13,57 +13,66 @@ defined('_JEXEC') or die;
 
 use Joomla\CMS\Form\Field\ListField;
 use Joomla\CMS\Factory;
+use Joomla\CMS\User\UserFactoryInterface;
 
 /**
  * The form field implementation
  */
 class CreatedbyField extends ListField
 {
-	/**
-	 * The form field type
-	 *
-	 * @var		string
-	 * @since	1.6
-	 */
-	protected $type = 'createdby';
+    /**
+     * The form field type
+     *
+     * @var		string
+     * @since	1.6
+     */
+    protected $type = 'createdby';
 
-	/**
-	 * Method to get the field input markup
-	 *
-	 * @return	string	The field input markup
-	 * @since	1.6
-	 */
-	protected function getInput()
-	{
-		$user = Factory::getUser();
+    /**
+     * Method to get the field input markup
+     *
+     * @return	string	The field input markup
+     * @since	1.6
+     */
+    protected function getInput()
+    {
+        $user = Factory::getApplication()->getIdentity();
 
-		$userExists = true;
+        $userExists = true;
 
-		if ($this->value) {
-			$db = Factory::getDbo();
-			$query = $db->getQuery(true)
-				->select('id')
-				->from('#__users')
-				->where($db->qn('id') . ' = ' . $db->q($this->value));
-			$db->setQuery($query);
-			$userId = $db->loadResult();
-			if ($userId) {
-				$user = Factory::getUser($this->value);
-			} else {
-				$userExists = false;
-				$this->value = $user->id;
-			}
-		} else {
-			$this->value = $user->id;
-		}
+        if ($this->value)
+        {
+            $db    = Factory::getContainer()->get('DatabaseDriver');
+            $query = $db->getQuery(true)
+                ->select('id')
+                ->from('#__users')
+                ->where($db->qn('id') . ' = ' . $db->q($this->value));
+            $db->setQuery($query);
+            $userId = $db->loadResult();
+            if ($userId)
+            {
+                $userfactory = Factory::getContainer()->get(UserFactoryInterface::class);
+                $user        = $userfactory->loadUserById($this->value);
+            }
+            else
+            {
+                $userExists  = false;
+                $this->value = $user->id;
+            }
+        }
+        else
+        {
+            $this->value = $user->id;
+        }
 
         $html = '';
-		if ($userExists) {
-			$html = $user->name . " (" . $user->username . ")";
-		}
+        if ($userExists)
+        {
+            $html = $user->name . " (" . $user->username . ")";
+        }
 
-		$html .= '<input type="hidden" name="' . $this->name . '" value="' . $this->value . '" />';
+        $html .= '<input type="hidden" name="' . $this->name . '" value="' . $this->value . '" />';
 
-		return $html;
-	}
+        return $html;
+    }
 }

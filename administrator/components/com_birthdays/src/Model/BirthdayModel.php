@@ -22,112 +22,114 @@ use Joomla\Component\Birthdays\Administrator\Helper\BirthdaysHelper;
  */
 class BirthdayModel extends AdminModel
 {
-	/**
-	 * @var		string	The prefix to use with controller messages
-	 * @since	1.6
-	 */
-	protected $text_prefix = 'COM_BIRTHDAYS';
+    /**
+     * @var		string	The prefix to use with controller messages
+     * @since	1.6
+     */
+    protected $text_prefix = 'COM_BIRTHDAYS';
 
-	/**
-	 * Method to get the record form.
-	 *
-	 * @param    array $data An optional array of data for the form to interogate
-	 * @param bool $loadData
-	 *
-	 * @return bool A JForm object on success, false on failure
+    /**
+     * Method to get the record form.
+     *
+     * @param    array $data An optional array of data for the form to interogate
+     * @param bool $loadData
+     *
+     * @return bool A JForm object on success, false on failure
      * @throws \Exception
-	 * @since    1.6
-	 */
-	public function getForm($data = array(), $loadData = true)
-	{
-		// Get the form
-		$form = $this->loadForm('com_birthdays.birthday', 'birthday', array('control' => 'jform', 'load_data' => $loadData));
-		if (empty($form))
-		{
-			return false;
-		}
+     * @since    1.6
+     */
+    public function getForm($data = array(), $loadData = true)
+    {
+        // Get the form
+        $form = $this->loadForm('com_birthdays.birthday', 'birthday', array('control' => 'jform', 'load_data' => $loadData));
+        if (empty($form))
+        {
+            return false;
+        }
 
-		return $form;
-	}
+        return $form;
+    }
 
-	/**
-	 * Method to get the data that should be injected in the form
-	 *
-	 * @return	mixed	The data for the form
+    /**
+     * Method to get the data that should be injected in the form
+     *
+     * @return	mixed	The data for the form
      * @throws  \Exception
-	 * @since	1.6
-	 */
-	protected function loadFormData()
-	{
-		// Check the session for previously entered form data
-		$data = Factory::getApplication()->getUserState('com_birthdays.edit.birthday.data', array());
+     * @since	1.6
+     */
+    protected function loadFormData()
+    {
+        // Check the session for previously entered form data
+        $data = Factory::getApplication()->getUserState('com_birthdays.edit.birthday.data', array());
 
-		if (empty($data))
-		{
-			$data = $this->getItem();
-		}
+        if (empty($data))
+        {
+            $data = $this->getItem();
+        }
 
         return $data;
-	}
+    }
 
-	/**
-	 * Prepare and sanitise the table prior to saving
-	 *
-	 * @since	1.6
-	 */
-	protected function prepareTable($table)
-	{
-		jimport('joomla.filter.output');
+    /**
+     * Prepare and sanitise the table prior to saving
+     *
+     * @since	1.6
+     */
+    protected function prepareTable($table)
+    {
+        jimport('joomla.filter.output');
 
-		if (empty($table->id))
-		{
-			// Set ordering to the last item if not set
-			if (@$table->ordering === '') {
-				$db = Factory::getDbo();
+        if (empty($table->id))
+        {
+            // Set ordering to the last item if not set
+            if (@$table->ordering === '')
+            {
+                $db    = Factory::getContainer()->get('DatabaseDriver');
                 $query = $db->getQuery(true)
                     ->select('MAX(ordering)')
                     ->from($db->qn('#__birthdays'));
-				$db->setQuery($query);
-				$max = $db->loadResult();
-				$table->ordering = $max+1;
-			}
-		}
-	}
+                $db->setQuery($query);
+                $max             = $db->loadResult();
+                $table->ordering = $max + 1;
+            }
+        }
+    }
 
-	/**
-	 * Method to initialize member variables used by batch methods and other methods like saveorder()
-	 *
-	 * @return  void
-	 *
+    /**
+     * Method to initialize member variables used by batch methods and other methods like saveorder()
+     *
+     * @return  void
+     *
      * @throws \Exception
-	 * @since   3.8.2
-	 */
-	public function initBatch()
-	{
-		if ($this->batchSet === null)
-		{
-			$this->batchSet = true;
+     * @since   3.8.2
+     */
+    public function initBatch()
+    {
+        if ($this->batchSet === null)
+        {
+            $this->batchSet = true;
 
-			// Get current user
-			$this->user = Factory::getUser();
+            // Get current user
+            $this->user = Factory::getUser();
 
-			// Get table
-			$this->table = $this->getTable();
+            // Get table
+            $this->table = $this->getTable();
 
-			// Get table class name
-			$tc = explode('\\', \get_class($this->table));
-			$this->tableClassName = end($tc);
+            // Get table class name
+            $tc                   = explode('\\', \get_class($this->table));
+            $this->tableClassName = end($tc);
 
-			if ($this->typeAlias === null) {
-				$this->typeAlias = '';
-			}
+            if ($this->typeAlias === null)
+            {
+                $this->typeAlias = '';
+            }
 
-			// Get UCM Type data
-			$this->contentType = new UCMType;
-			$this->type = $this->contentType->getTypeByTable($this->tableClassName)
-				?: $this->contentType->getTypeByAlias($this->typeAlias);
-		}
-	}
+            // Get UCM Type data
+            $this->contentType = new UCMType;
+            $this->type        = $this->contentType->getTypeByTable($this->tableClassName)
+                ?: $this->contentType->getTypeByAlias($this->typeAlias);
+        }
+    }
 
     /**
      * @param $data

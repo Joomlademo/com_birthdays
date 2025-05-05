@@ -19,27 +19,29 @@ use Joomla\Database\Mysqli\MysqliQuery;
  */
 class DatabaseHelper
 {
-	/**
-	 * Build the search query from the columns
-	 *
-	 * @param	string		        $searchPhrase	    Search for this phrase
-	 * @param	array		        $searchColumns	    The columns in the DB to look up
-	 * @param   MysqliQuery         $query              The query
-	 *
-	 * @return	MysqliQuery		    $query			    The query (search filters applied)
-	 */
-    public static function buildSearchQuery(string $searchPhrase, array $searchColumns, MysqliQuery $query): MysqliQuery
+    /**
+     * Build the search query from the columns
+     *
+     * @param	string		        $searchPhrase	    Search for this phrase
+     * @param	array		        $searchColumns	    The columns in the DB to look up
+     * @param   MysqliQuery         $query              The query
+     *
+     * @return	MysqliQuery		    $query			    The query (search filters applied)
+     */
+    public static function buildSearchQuery(string $searchPhrase, array $searchColumns, MysqliQuery $query) : MysqliQuery
     {
-        $db = Factory::getDbo();
+        $db = Factory::getContainer()->get('DatabaseDriver');
 
         $where = [];
 
-        foreach ($searchColumns as $i => $searchColumn) {
+        foreach ($searchColumns as $i => $searchColumn)
+        {
             $where[] = $db->qn($searchColumn) . ' LIKE ' . $db->q('%' . $db->escape($searchPhrase, true) . '%');
         }
 
-        if (!empty($where)) {
-	        $query->where('(' . implode(' OR ', $where) . ')');
+        if (! empty($where))
+        {
+            $query->where('(' . implode(' OR ', $where) . ')');
         }
 
         return $query;

@@ -22,13 +22,13 @@ use Joomla\CMS\Router\Route;
  */
 class DisplayController extends BaseController
 {
-	/**
-	 * The default view.
-	 *
-	 * @var    string
-	 * @since  2.5
-	 */
-	protected $default_view = 'birthdays';
+    /**
+     * The default view.
+     *
+     * @var    string
+     * @since  2.5
+     */
+    protected $default_view = 'birthdays';
 
     /**
      * Method to display a view.
@@ -41,22 +41,22 @@ class DisplayController extends BaseController
      * @throws \Exception
      * @since    2.5
      */
-	public function display($cachable = false, $urlparams = array())
-	{
-		$view   = $this->input->get('view', $this->default_view);
-		$layout = $this->input->get('layout', 'default');
-		$id     = $this->input->getInt('id');
+    public function display($cachable = false, $urlparams = array())
+    {
+        $view   = $this->input->get('view', $this->default_view);
+        $layout = $this->input->get('layout', 'default');
+        $id     = $this->input->getInt('id');
 
-		// Check for edit form.
-		if ((string)$view === 'birthday' && (string)$layout === 'edit' && !$this->checkEditId('com_birthdays.edit.birthday', $id))
-		{
-			// Somehow the person just went to the form - we don't allow that.
-			$this->setMessage(Text::sprintf('JLIB_APPLICATION_ERROR_UNHELD_ID', $id), 'error');
-			$this->setRedirect(Route::_('index.php?option=com_birthdays&view=birthdays', false));
+        // Check for edit form.
+        if ((string) $view === 'birthday' && (string) $layout === 'edit' && ! $this->checkEditId('com_birthdays.edit.birthday', $id))
+        {
+            // Somehow the person just went to the form - we don't allow that.
+            $this->setMessage(Text::sprintf('JLIB_APPLICATION_ERROR_UNHELD_ID', $id), 'error');
+            $this->setRedirect(Route::_('index.php?option=com_birthdays&view=birthdays', false));
 
-			return false;
-		}
+            return false;
+        }
 
-		return parent::display();
-	}
+        return parent::display();
+    }
 }

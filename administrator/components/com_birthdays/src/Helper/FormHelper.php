@@ -35,12 +35,15 @@ class FormHelper
     public function getFieldOptions()
     {
         $fieldOptions = [];
-        foreach ($this->form->getXml()->fieldset->children() as $field) {
-            $fieldColumn = (string)$field['name'];
-            foreach ($field->children() as $option) {
-                $key = (string) $option['value'];
+        foreach ($this->form->getXml()->fieldset->children() as $field)
+        {
+            $fieldColumn = (string) $field['name'];
+            foreach ($field->children() as $option)
+            {
+                $key   = (string) $option['value'];
                 $value = (string) $option;
-                if (!in_array($key, $this->fieldOptionKeys, true)) {
+                if (! in_array($key, $this->fieldOptionKeys, true))
+                {
                     $this->fieldOptionKeys[] = $key;
                 }
                 $fieldOptions[$fieldColumn][$key] = $value;
@@ -59,21 +62,27 @@ class FormHelper
      */
     public function appendFieldOptions($items)
     {
-        $this->items = $items;
+        $this->items  = $items;
         $fieldOptions = $this->getFieldOptions();
-        foreach ($this->items as $i => $item) {
-            if (empty($item)) {
+        foreach ($this->items as $i => $item)
+        {
+            if (empty($item))
+            {
                 continue;
             }
-            foreach ($item as $key => $value) {
-                if ((string)$key === 'state') {
+            foreach ($item as $key => $value)
+            {
+                if ((string) $key === 'state')
+                {
                     continue;
                 }
-                if (!in_array($item->{$key}, $this->fieldOptionKeys, true)) {
+                if (! in_array($item->{$key}, $this->fieldOptionKeys, true))
+                {
                     continue;
                 }
                 // If this field has options
-                if (!isset($fieldOptions[$key][$value])) {
+                if (! isset($fieldOptions[$key][$value]))
+                {
                     continue;
                 }
                 // Update the item key with the field option

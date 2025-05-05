@@ -28,15 +28,6 @@ class BirthdaysHelper
         // Get today's date
         $today = date( "Y-m-d 00:00:00" );
 
-        // Get the next 5 upcoming birthdays
-        // $query = $db->getQuery( true )
-        //     ->select( $db->quoteName( [ 'birthday', 'name' ] ) )
-        //     ->from( '#__birthdays' )
-        //     ->where( $db->quoteName( 'state' ) . ' = 1' )
-        //     ->where( $db->quoteName( 'birthday' ) . ' >= :today' )
-        //     ->order( $db->quoteName( 'birthday' ) )
-        //     ->bind( ':today', $today, ParameterType::STRING )
-        //     ->setLimit( '5' );
         $query = "
             WITH upcoming_birthdays AS (
                 SELECT 

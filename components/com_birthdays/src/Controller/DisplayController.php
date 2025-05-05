@@ -33,30 +33,31 @@ class DisplayController extends BaseController
      * @throws Exception
      * @since   3.1
      */
-	public function display($cachable = false, $urlparams = false)
-	{
-		$user = Factory::getUser();
+    public function display($cachable = false, $urlparams = false)
+    {
+        $user = Factory::getApplication()->getIdentity();
 
-		// Set the default view name and format from the Request
-		$vName = $this->input->get('view', 'Birthdays');
-		$this->input->set('view', $vName);
+        // Set the default view name and format from the Request
+        $vName = $this->input->get('view', 'Birthdays');
+        $this->input->set('view', $vName);
 
-		if ($user->get('id') || ($this->input->getMethod() === 'POST' && $vName === 'Birthdays')) {
-			$cachable = false;
-		}
+        if ($user->get('id') || ($this->input->getMethod() === 'POST' && $vName === 'Birthdays'))
+        {
+            $cachable = false;
+        }
 
-		$safeurlparams = array(
-			'id'               => 'ARRAY',
-			'type'             => 'ARRAY',
-			'limit'            => 'UINT',
-			'limitstart'       => 'UINT',
-			'filter_order'     => 'CMD',
-			'filter_order_Dir' => 'CMD',
-			'lang'             => 'CMD'
-		);
+        $safeurlparams = array(
+            'id' => 'ARRAY',
+            'type' => 'ARRAY',
+            'limit' => 'UINT',
+            'limitstart' => 'UINT',
+            'filter_order' => 'CMD',
+            'filter_order_Dir' => 'CMD',
+            'lang' => 'CMD',
+        );
 
-        Factory::getLanguage()->load('com_birthdays', JPATH_ADMINISTRATOR, 'en-GB', true);
+        Factory::getApplication()->getLanguage()->load('com_birthdays', JPATH_ADMINISTRATOR, 'en-GB', true);
 
-		return parent::display($cachable, $safeurlparams);
-	}
+        return parent::display($cachable, $safeurlparams);
+    }
 }
